@@ -81,10 +81,20 @@ if view_mode == "Week":
     title_label = f"Week of {start_date.strftime('%d %b')} – {end_date.strftime('%d %b %Y')}"
 
 elif view_mode == "Month":
-    selected_month = st.date_input("Select month", value=df["week_start"].max())
-    start_date = selected_month.replace(day=1)
-    end_date = (start_date + pd.offsets.MonthEnd(1)).date()
-    title_label = f"{start_date.strftime('%B %Y')}"
+    # Create month labels based on available weeks
+    df["month_label"] = df["week_start"].dt.strftime("%b %Y")
+    months = sorted(df["month_label"].unique(), key=lambda x: pd.to_datetime(x))
+    
+    selected_month_label = st.selectbox("Select month:", months, index=len(months) - 1)
+    
+    # Compute start and end of selected month
+    selected_month = pd.to_datetime(selected_month_label)
+    month_start = selected_month.replace(day=1)
+    month_end = (month_start + pd.offsets.MonthEnd(1)).date()
+    
+    filtered_df = df.query("@month_start <= week_start <= @month_end")
+    title_label = selected_month_label
+
 
 else:
     col1, col2 = st.columns(2)
