@@ -70,7 +70,7 @@ st.markdown("## 🏆 Agent Rankings")
 
 view_mode = st.radio(
     "View performance by:",
-    ["Week", "Month", "Custom range"],
+    ["Week", "Custom range"],
     horizontal=True
 )
 
