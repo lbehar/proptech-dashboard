@@ -12,8 +12,16 @@ st.title("🏡 AskVinny — Agent Performance Dashboard")
 st.markdown("Explore weekly performance, long-term trends, and conversion outcomes for each agent.")
 
 # --- Database connection ---
-engine = create_engine(st.secrets["DATABASE_URL"])
+import os
 
+db_url = st.secrets.get(
+    "DATABASE_URL",
+    os.getenv("DATABASE_URL", "postgresql://placeholder@localhost:5432/neondb")
+)
+if "DATABASE_URL" not in st.secrets:
+    st.warning("⚠️ Using fallback DB connection. Check secrets.toml or Streamlit Cloud settings.")
+
+engine = create_engine(db_url)
 # --- Load weekly aggregated data ---
 @st.cache_data(ttl=3600)
 def load_weekly_data():
