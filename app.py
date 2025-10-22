@@ -5,15 +5,14 @@ from sqlalchemy import create_engine
 import plotly.express as px
 from datetime import timedelta
 
+
 # --- Page setup ---
 st.set_page_config(page_title="AskVinny — Agent Performance", page_icon="🏡", layout="wide")
 st.title("🏡 AskVinny — Agent Performance Dashboard")
 st.markdown("Explore weekly performance, long-term trends, and conversion outcomes for each agent.")
 
 # --- Database connection ---
-engine = create_engine(
-    "postgresql://neondb_owner:npg_NVGydXqe3ar6@ep-aged-field-adcu8co8-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require"
-)
+engine = create_engine(st.secrets["DATABASE_URL"])
 
 # --- Load weekly aggregated data ---
 @st.cache_data(ttl=3600)
