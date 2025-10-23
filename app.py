@@ -115,7 +115,7 @@ melted["Metric"] = melted["Metric"].map({
 })
 
 # Sort by viewings
-agent_order = sorted(agg_df["agent"].unique())
+agent_order = agg_df.sort_values("total_viewings", ascending=False)["agent"]
 
 fig_rank = px.bar(
     melted,
